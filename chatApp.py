@@ -18,7 +18,11 @@ def homePage():
         with open("users.csv", "a") as csvfile:
              csvwriter = csv.writer(csvfile)
              csvwriter.writerows(data)
+        
     return render_template('register.html')
+
+
+
 
 @app.route('/login', methods=['GET','POST'])
 def loginPage():
