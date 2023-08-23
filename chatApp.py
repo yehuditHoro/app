@@ -2,6 +2,7 @@ from flask import Flask, render_template, redirect, url_for, request,redirect
 import csv,os
 
 app = Flask(__name__)
+room_names = []
 
 
 @app.route('/register',methods=['GET','POST'])
@@ -21,11 +22,8 @@ def homePage():
         
     return render_template('register.html')
 
-
-
-
-@app.route('/login', methods=['GET','POST'])
-def loginPage():
+@app.route('/login', methods=['GET', 'POST'])
+def login():
     if request.method == 'POST':
      username = request.form['username']
      userpass = request.form['password']
@@ -41,14 +39,18 @@ def loginPage():
     return render_template('login.html')
     
 
-# @app.route('/lobby',methods=['GET','POST'])
-# def lobbyPage():
-#     if request.method == 'POST':
-#         new_room = request.form['new_room']
-#         if new_room not in os.listdir("./rooms"):
-#            room_file = open('./rooms/${room}.txt', 'w') 
-#     return render_template('lobby.html')
-  
+@app.route('/lobby',methods=['GET','POST'])
+def lobbyPage():
+    if request.method == 'POST':
+        new_room = request.form['new_room']
+        if new_room not in os.listdir("./rooms"):
+           room_names.append(new_room)
+           #room_file = open('./rooms/${room}.txt', 'w') 
+           room_file = open(f'./rooms/{new_room}.txt', 'w')  
+           room_file.close()
+    return render_template('lobby.html',room_names=room_names)
+
+
 if __name__ == '__main__':
     app.debug = True
     app.run(host='0.0.0.0', port='5000', debug='True')
