@@ -1,4 +1,5 @@
 
+import base64
 from flask import Flask, render_template, redirect, request, session
 import csv
 from datetime import datetime
@@ -17,6 +18,7 @@ def username_exists(username):
 
 # Function to register a new user
 def register_user(username, userpass):
+    userpass=encode_password(userpass)
     data = [[username, userpass]]
     with open("users.csv", "a") as csvfile:
         csvwriter = csv.writer(csvfile)
@@ -28,6 +30,7 @@ def login_user(username, userpass):
         users_arr = csv.reader(users)
         for user in users_arr:
             if user[0] == username:
+                userpass=decode_password(user[1])
                 if user[1] != userpass:
                     return "wrong password, try again"
                 else:
@@ -98,6 +101,19 @@ def update_chat(id):
     with open(f'rooms/{id}.txt', 'r') as file:
         all_data = file.read()
     return all_data
+
+def encode_password(user_pass):
+    pass_bytes = user_pass.encode('ascii')
+    base64_bytes = base64.b64encode(pass_bytes)
+    base64_message = base64_bytes.decode('ascii')
+    return base64_message
+
+def decode_password(user_pass):
+    base64_bytes = user_pass.encode('ascii')
+    pass_bytes = base64.b64decode(base64_bytes)
+    user_pass = pass_bytes.decode('ascii')
+    return user_pass
+
 
 if __name__ == '__main__':
     app.debug = True
