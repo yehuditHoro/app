@@ -17,9 +17,7 @@ COPY requirements.txt .
 # install dependencies
 RUN pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org -r requirements.txt
 # copy the content of the local src directory to the working directory
-#HEAD
-COPY src/ .
+COPY / .
 COPY . .
-#>>>>>>> 69c9623707710166c79daec45b53d7e4d94298da
 # command to run on container start
 CMD [ "python", "./chatApp.py" ]
